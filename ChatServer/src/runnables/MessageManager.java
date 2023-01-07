@@ -16,61 +16,63 @@ public class MessageManager implements Runnable{
     private Client user;
 
     public MessageManager(Socket user) throws IOException{
-
         this.user = new Client(user, null);
         this.input = new DataInputStream(user.getInputStream());
-
     }
+
     private String username;
     @Override
         public void run() {
-         try {
+        try {
             sendMessageTo(user, "You're connected! Please pick a nick. No spaces, that's it.");
-             do {
-                 username = input.readUTF().trim();
+            do {
+                username = input.readUTF().trim();
                     if (username.isEmpty()) 
-
-                    sendMessageTo(user, "Nameless? Edgy...No you cant come in.");
+                        sendMessageTo(user, "Nameless? Edgy...No you cant come in.");
 
                     else if (username.contains(" "))
-                    sendMessageTo(user, "Did you even read what I said? NO SPACES.");
+                        sendMessageTo(user, "Did you even read what I said? NO SPACES.");
 
                     else if (JoinManager.getClientManager().getClients().containsKey(username))
-                    sendMessageTo(user, "No.");
+                        sendMessageTo(user, "No.");
 
                     else if (username.contains("LetMeSoloHer"))
-                    sendMessageTo(user, "Heed my words. I am Malenia. Blade of Miquella. And I have never known defeat.");
+                        sendMessageTo(user, "Heed my words. I am Malenia. Blade of Miquella. And I have never known defeat.");
 
                     else if (username.contains("JoshSwain"))
-                    sendMessageTo(user, "There can be only one. You know that.");
+                        sendMessageTo(user, "There can be only one. You know that.");
 
                     else if (username.contains("RickAstley"))
-                    sendMessageTo(user, "Never gonna let you in.");
+                        sendMessageTo(user, "Never gonna let you in.");
 
                     else if (username.contains("MichaelRosen"))
-                    sendMessageTo(user, "noice.");
+                        sendMessageTo(user, "noice.");
                 else break;
                 username = null;
             } while (username == null);
+
             user.setUsername(username);
             JoinManager.getClientManager().getClients().put(username, user);
             broadcastMessage(username + " just joined, everyone say hi!");
 
-
             while (!ended){             //heres messages, remember the stuff please
                 String msg = input.readUTF();
-                if (msg.startsWith("/")) processCommand(msg);
+                if (msg.startsWith("/")) 
+                    processCommand(msg);
                 else {
                     user.sendMessage(msg);
                     sendMessageTo(user, ">" + username + ": " + msg);
                 }
             }
 
-
             JoinManager.getClientManager().getClients().remove(username);
             user.getSocket().close();
         } catch (SocketException e) {
+            System.out.println("SocketException:");
+            e.printStackTrace();
         } catch (EOFException e) {
+            System.out.println("EOFException:");
+            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
