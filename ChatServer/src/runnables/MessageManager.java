@@ -47,7 +47,8 @@ public class MessageManager implements Runnable{
 
                     else if (username.contains("MichaelRosen"))
                         sendMessageTo(user, "noice.");
-                else break;
+                    
+                    else break;
                 username = null;
             } while (username == null);
 
@@ -74,6 +75,7 @@ public class MessageManager implements Runnable{
             System.out.println("EOFException:");
             e.printStackTrace();
         } catch (IOException e) {
+            System.out.println("IOException:");
             e.printStackTrace();
         }
         if (username == null) return;
@@ -100,7 +102,7 @@ public class MessageManager implements Runnable{
                 break;
             case "global":
                 if (user.getConnection() == null)
-                sendMessageTo(user, "Youve already arrived to your destination");
+                sendMessageTo(user, "You\'ve already arrived to your destination");
                 else {
                     sendMessageTo(user, "Reconnected to global.");
                     sendMessageTo(user.getConnection(), user + " left the DM, reconnecting to global.");
@@ -178,8 +180,7 @@ public class MessageManager implements Runnable{
     private static void sendMsgToGlobal(String msg) {
         JoinManager.getClientManager().getClients().forEach((s, c) -> {
             if (c.getConnection() == null)
-            sendMessageTo(c, msg);
-
+                sendMessageTo(c, msg);
         });
     }
     public static synchronized void sendMessageTo(Client client, String msg) {
