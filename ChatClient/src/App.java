@@ -52,7 +52,7 @@ public class App {
         try {
             while (!terminated) {
                 msg = sc.nextLine();
-                if (msg.trim().isEmpty()) out.writeUTF(msg);
+                out.writeUTF(msg);
             }
         } catch (SocketException e) {
             System.out.println("Connection terminated.");
